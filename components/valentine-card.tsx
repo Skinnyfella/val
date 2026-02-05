@@ -25,6 +25,16 @@ export default function ValentineCard({ onBack }: ValentineCardProps) {
     }
   }, [])
 
+  // Debug audio element
+  useEffect(() => {
+    setTimeout(() => {
+      if (audioRef.current) {
+        console.log("Audio src:", audioRef.current.src)
+        console.log("Audio canPlayType:", audioRef.current.canPlayType("audio/mpeg"))
+      }
+    }, 500)
+  }, [])
+
   // Pause music when component unmounts
   useEffect(() => {
     return () => {
@@ -67,9 +77,7 @@ export default function ValentineCard({ onBack }: ValentineCardProps) {
       transition={{ duration: 0.6 }}
     >
       {/* Background music */}
-      <audio ref={audioRef} loop>
-        <source src="/valentine-music.mp3" type="audio/mpeg" />
-      </audio>
+      <audio ref={audioRef} loop src="/valentine-music.mp3"></audio>
 
       {/* Card */}
       <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-md">
