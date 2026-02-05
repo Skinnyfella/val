@@ -12,6 +12,10 @@ export default function ValentineCard({ onBack }: ValentineCardProps) {
   const [showConfetti, setShowConfetti] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
+  // Your Google Apps Script Web app URL (from step 3 in previous instructions)
+  // Replace this with your real /exec URL!
+  const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_LONG_UNIQUE_ID_HERE/exec";
+
   // Play music when card opens
   useEffect(() => {
     if (audioRef.current) {
@@ -30,18 +34,27 @@ export default function ValentineCard({ onBack }: ValentineCardProps) {
     }
   }, [])
 
-  const handleResponse = (response: "yes" | "no") => {
+  const handleResponse = async (response: "yes" | "no") => {
     setSelectedResponse(response)
+
+    try {
+      // Send the response to Google Apps Script
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", // Use this to avoid CORS issues (data still sends!)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ response }) // Sends { response: "yes" } or "no"
+      })
+
+      // Optional: Log success for debugging
+      console.log(`Response sent to Sheet: ${response}`)
+    } catch (err) {
+      console.error("Error sending response:", err)
+      // You can still show the UI feedback even if send fails
+    }
 
     if (response === "yes") {
       setShowConfetti(true)
-      // Callback for backend integration
-      console.log("Valentine response: YES")
-      // You can call an API here: await fetch('/api/valentine-response', { method: 'POST', body: JSON.stringify({ response: 'yes' }) })
-    } else {
-      // Callback for backend integration
-      console.log("Valentine response: NO")
-      // You can call an API here: await fetch('/api/valentine-response', { method: 'POST', body: JSON.stringify({ response: 'no' }) })
     }
   }
 
@@ -80,16 +93,16 @@ export default function ValentineCard({ onBack }: ValentineCardProps) {
 
         {/* Main message */}
         <div className="text-center mb-8">
-          <p className="font-serif text-rose-600 text-lg mb-4">Dear Eniola,</p>
+          <p className="font-serif text-rose-600 text-lg mb-4">Dear Riri,</p>
           <p className="text-gray-700 font-light leading-relaxed mb-4">
-            Every moment with you has been fun. Your energy lifts days, and your laugh makes everything lighter.
+            I know Valentine’s Day isn’t really my thing, but I’d actually love to take you out that day. Go arcade , dinner, an open air cinema then party later.
           </p>
           <p className="text-gray-700 font-light leading-relaxed mb-6">
-            I appreciate the memories we’ve made these past months, and I’m excited to make more moments together, starting with Valentine’s Day.
+            Just us spending time together   So this is me officially asking, will you go out with me?
           </p>
 
           {/* Big question */}
-          <h2 className="font-serif text-3xl text-rose-600 mt-8 mb-8">Will you be my Valentine?</h2>
+          
         </div>
 
         {/* Response buttons */}

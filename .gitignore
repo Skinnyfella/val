@@ -19,6 +19,9 @@ yarn-error.log*
 # env files
 .env*
 
+# audio files
+*.mp3
+
 # vercel
 .vercel
 
