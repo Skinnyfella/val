@@ -27,6 +27,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.tssong.mp3
-*.mp3
-*.wav
+next-env.d.ts
